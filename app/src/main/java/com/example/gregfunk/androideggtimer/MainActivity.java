@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -15,7 +16,10 @@ public class MainActivity extends AppCompatActivity {
 
     SeekBar timerSeekBar;
     TextView timerTextView;
+    Button controllerButton;
+    CountDownTimer timer;
 
+    boolean counterIsActive;
 
     public void updateTimer(int secondsLeft) {
         int minutes = (int) secondsLeft / 60;
@@ -30,21 +34,34 @@ public class MainActivity extends AppCompatActivity {
     public void controlTimer(View view) {
         //Log.i("Button pressed", "pressed");
 
-        new CountDownTimer(timerSeekBar.getProgress() * 1000 + 100, 1000) {
+        if (counterIsActive == false) {
+            counterIsActive = true;
+            timerSeekBar.setEnabled(false);
+            controllerButton.setText("Stop");
 
-            @Override
-            public void onTick(long millisUntilFinished) {
-                updateTimer((int) millisUntilFinished / 1000);
-            }
+            timer = new CountDownTimer(timerSeekBar.getProgress() * 1000 + 100, 1000) {
 
-            @Override
-            public void onFinish() {
-                updateTimer(0);
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    updateTimer((int) millisUntilFinished / 1000);
+                }
 
-                MediaPlayer mplayer = MediaPlayer.create(getApplicationContext(), R.raw.airhorn);
-                mplayer.start();
-            }
-        }.start();
+                @Override
+                public void onFinish() {
+                    updateTimer(0);
+
+                    MediaPlayer mplayer = MediaPlayer.create(getApplicationContext(), R.raw.airhorn);
+                    mplayer.start();
+                }
+            }.start();
+        } else {
+            timerTextView.setText("0:30");
+            timerSeekBar.setProgress(30);
+            timer.cancel();
+            counterIsActive = false;
+            timerSeekBar.setEnabled(true);
+            controllerButton.setText("Go!");
+        }
     }
 
     @Override
@@ -52,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        controllerButton = (Button) findViewById(R.id.controllerButton);
         timerTextView = (TextView) findViewById(R.id.timerTextView);
         timerSeekBar = (SeekBar)findViewById(R.id.timerSeekBar);
         timerSeekBar.setMax(600);
