@@ -1,5 +1,6 @@
 package com.example.gregfunk.androideggtimer;
 
+import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,7 +40,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 updateTimer(0);
-                Log.i("finished", "timer is done");
+
+                MediaPlayer mplayer = MediaPlayer.create(getApplicationContext(), R.raw.airhorn);
+                mplayer.start();
             }
         }.start();
     }
