@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     public void controlTimer(View view) {
         //Log.i("Button pressed", "pressed");
 
-        new CountDownTimer(timerSeekBar.getProgress() * 1000, 1000) {
+        new CountDownTimer(timerSeekBar.getProgress() * 1000 + 100, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
