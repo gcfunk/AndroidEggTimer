@@ -31,6 +31,15 @@ public class MainActivity extends AppCompatActivity {
         timerTextView.setText(Integer.toString(minutes) + ":" + secondString);
     }
 
+    public void resetTimer(){
+        timerTextView.setText("0:30");
+        timerSeekBar.setProgress(30);
+        timer.cancel();
+        counterIsActive = false;
+        timerSeekBar.setEnabled(true);
+        controllerButton.setText("Go!");
+    }
+
     public void controlTimer(View view) {
         //Log.i("Button pressed", "pressed");
 
@@ -52,15 +61,12 @@ public class MainActivity extends AppCompatActivity {
 
                     MediaPlayer mplayer = MediaPlayer.create(getApplicationContext(), R.raw.airhorn);
                     mplayer.start();
+
+                    resetTimer();
                 }
             }.start();
         } else {
-            timerTextView.setText("0:30");
-            timerSeekBar.setProgress(30);
-            timer.cancel();
-            counterIsActive = false;
-            timerSeekBar.setEnabled(true);
-            controllerButton.setText("Go!");
+            resetTimer();
         }
     }
 
